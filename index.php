@@ -3,6 +3,9 @@
 require_once 'lib/server.php';
 require 'lib/connectToGoogle.php';
 
+if (!strstr($_SERVER['HTTP_ACCEPT'], 'json')) {
+	header('location: client.html');
+}
 
 class EventsModel extends Model {
 
