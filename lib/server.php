@@ -190,65 +190,65 @@ abstract class Model {
 /*******************************************************************************
  * Example application
  ****************************************/
-
-
-$app = new Router();
-
-
-/* Matches /event/:id */
-$regex = '/^\/event\/(?P<id>[0-9]+)(?:|\/.*)$/';
-
-/** Get events for a month */
-function getEvent($req, $res) {
-	$res->sendData(array(
-		'title' => 'You wanted this data...',
-		'id' => $req->param('id'),
-		'allParams' => $req->params
-	));
-}
-$app->get($regex, 'getEvent');
-
-/** Create an event */
-function postEvent($req, $res) {}
-$app->post($regex, 'postEvent');
-
-
-/** Update an event */
-function putEvent($req, $res) {}
-$app->put($regex, 'putEvent');
-
-/** Delete an event */
-function deleteEvent($req, $res) {}
-$app->delete($regex, 'deleteEvent');
-
-/** Retrieve all events between start time and end time. */
-function getEvents($req, $res) {
-	$res->sendData($req->params);
-}
-/* Matches /events/:start(/:end(/*)) */
-$app->get('/^\/events\/(?P<start>[0-9]+)(?:|\/(?P<end>[0-9]+)(?:|\/.*))$/', 'getEvents');
-
-
-class SongsModel extends Model {
-
-	public function get($req, $res) {
-		$res->sendData('You wanted a specific song? ' . $req->param('id') . ' by the way.');
-	}
-
-
-	public $overrideIndexRegex = '/\/songs\/(?P<genre>[[:alnum:]]+)(?:|\/.*)$/i';
-
-	public function index($req, $res) {
-		$res->sendData("You wanted to listen to " . $req->param('genre'));
-	}
-
-
-	public function update($req, $res) {}
-	public function delete($req, $res) {}
-	public function create($req, $res) {}
-}
-
-$songs = new SongsModel($app);
-
-$app->run();
-
+// 
+// 
+// $app = new Router();
+// 
+// 
+// /* Matches /event/:id */
+// $regex = '/^\/event\/(?P<id>[0-9]+)(?:|\/.*)$/';
+// 
+// /** Get events for a month */
+// function getEvent($req, $res) {
+// 	$res->sendData(array(
+// 		'title' => 'You wanted this data...',
+// 		'id' => $req->param('id'),
+// 		'allParams' => $req->params
+// 	));
+// }
+// $app->get($regex, 'getEvent');
+// 
+// /** Create an event */
+// function postEvent($req, $res) {}
+// $app->post($regex, 'postEvent');
+// 
+// 
+// /** Update an event */
+// function putEvent($req, $res) {}
+// $app->put($regex, 'putEvent');
+// 
+// /** Delete an event */
+// function deleteEvent($req, $res) {}
+// $app->delete($regex, 'deleteEvent');
+// 
+// /** Retrieve all events between start time and end time. */
+// function getEvents($req, $res) {
+// 	$res->sendData($req->params);
+// }
+// /* Matches /events/:start(/:end(/*)) */
+// $app->get('/^\/events\/(?P<start>[0-9]+)(?:|\/(?P<end>[0-9]+)(?:|\/.*))$/', 'getEvents');
+// 
+// 
+// class SongsModel extends Model {
+// 
+// 	public function get($req, $res) {
+// 		$res->sendData('You wanted a specific song? ' . $req->param('id') . ' by the way.');
+// 	}
+// 
+// 
+// 	public $overrideIndexRegex = '/\/songs\/(?P<genre>[[:alnum:]]+)(?:|\/.*)$/i';
+// 
+// 	public function index($req, $res) {
+// 		$res->sendData("You wanted to listen to " . $req->param('genre'));
+// 	}
+// 
+// 
+// 	public function update($req, $res) {}
+// 	public function delete($req, $res) {}
+// 	public function create($req, $res) {}
+// }
+// 
+// $songs = new SongsModel($app);
+// 
+// $app->run();
+// 
