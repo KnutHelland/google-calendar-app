@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 		watch: {
 
 			files: ['Gruntfile.js', 'coffee/*'],
-			tasks: ['clean', 'coffee']
+			tasks: ['clean', 'coffee', 'requirejs']
 		},
 
 		/* Compile files from ./coffee to ./js */
@@ -23,18 +23,29 @@ module.exports = function (grunt) {
 				src: ['**/*.coffee'],
 				dest: 'js/',
 				ext: '.js'
+				// options: {
+				// 	bare: true
+				// }
 			}
 		},
 
 		/* Minimize all javascript */
-		/*requirejs: {
+		requirejs: {
 			compile: {
-				baseUrl: 'js/',
-				optimize: 'none',
-				out: 'dist/webapp.js',
-				name: 'global'
+				options: {
+					baseUrl: 'js',
+					out: 'dist/webapp.js',
+					mainConfigFile: 'js/main.js',
+					name: 'main',
+					paths: {
+						jquery: 'empty:',
+						underscore: 'empty:',
+						backbone: 'empty:'
+					}/*,
+					optimize: 'none'*/
+				}
 			}
-		},*/
+		},
 
 
 		clean: {
@@ -43,5 +54,5 @@ module.exports = function (grunt) {
 	});
 
 
-	grunt.registerTask('default', ['clean', 'coffee' /*, 'requirejs' */]);
+	grunt.registerTask('default', ['clean', 'coffee', 'requirejs']);
 }

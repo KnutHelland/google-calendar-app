@@ -1,9 +1,19 @@
-
 requirejs.config
 	baseUrl: 'js'
-	paths:
-		jquery: 'lib/jquery'
-		backbone: 'lib/backbone'
+	shim:
+		'jquery':
+			exports: 'JQuery'
+		'underscore':
+			exports: '_'
+		'backbone':
+			deps: ['underscore', 'jquery']
+			exports: 'Backbone'
+	
+#	paths:
+#		jquery: 'lib/jquery'
+#		underscore: 'lib/underscore'
+#		backbone: 'lib/backbone'
 
-
-window.alert "Hello!!!"
+require ['application', 'jquery'], (App, $) ->
+ 	app = new App
+ 	app.start()
