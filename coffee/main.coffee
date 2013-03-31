@@ -9,11 +9,13 @@ requirejs.config
 			deps: ['underscore', 'jquery']
 			exports: 'Backbone'
 	
-#	paths:
-#		jquery: 'lib/jquery'
-#		underscore: 'lib/underscore'
-#		backbone: 'lib/backbone'
+	paths:
+		jquery: '../lib/jquery'
+		underscore: '../lib/underscore'
+		backbone: '../lib/backbone'
 
-require ['application', 'jquery'], (App, $) ->
- 	app = new App
- 	app.start()
+require ['router', 'backbone', 'jquery', 'models/calendars'], (Router, Backbone, $, Calendars) ->
+ 	router = Router
+
+ 	Backbone.history.start()
+
