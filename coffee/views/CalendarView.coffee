@@ -31,13 +31,15 @@ gColors) ->
 
 			@calendars.fetch()
 
+
 		eventsLoaded: (events) ->
 			if events.calendarId in @loadedCalendars
 				# Todo remove all elements
 				""
-			
+
 			events.forEach (event) =>
 				@addEventToCalendar event
+
 
 		addEventToCalendar: (event) ->
 			# Color

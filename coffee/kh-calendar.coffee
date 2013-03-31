@@ -33,6 +33,7 @@ define ["jquery"], ($) ->
     constructor: ->
       @num = Calendar.addCalendar()
       @months = {}
+      @chrome = /chrome/.test(navigator.userAgent.toLowerCase())
   
     #
     # Generates IDs for new calendars.
@@ -78,8 +79,16 @@ define ["jquery"], ($) ->
               height="#{dateElement.height()}px"
               width="#{dateElement.width()}px">
           </canvas>"""
+      
+      canvas = document.getElementById "canvas_date_#{datestamp}_#{@num}"
+
+      # Need to reposition the canvas if chrome
+      if @chrome
+        c = $ canvas
+        c.css
+          left: c.parent().position().left
   
-      document.getElementById "canvas_date_#{datestamp}_#{@num}"
+      return canvas
   
     #
     # Registers a callback to happen onclick on a date.
