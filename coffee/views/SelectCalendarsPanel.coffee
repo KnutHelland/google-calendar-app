@@ -51,13 +51,12 @@ define ['backbone', 'jquery', 'underscore', 'jquery_mobile'], (Backbone, $, _) -
 			item.on 'click', (event) =>
 				if event.originalEvent # Dont catch jquery event
 					return
-
 				@_toggleCalendar(calendar)
 
+		# Render the panel
 		render: (event) =>
 			@el = document.getElementById @id
 			@$el = $ @el
-
 			@$el.text ""
 
 			list = $ """

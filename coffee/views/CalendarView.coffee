@@ -38,7 +38,8 @@ SelectCalendarsPanel) ->
 				@listenTo calendar.events, 'sync', =>
 					@refreshCalendar calendar
 
-			@listenTo @calendars, 'change:display', @_changedCalendarDisplay
+			@listenTo @calendars, 'change:display', (calendar) =>
+				@refreshCalendar calendar
 
 			panel = new SelectCalendarsPanel
 				calendars: @calendars
@@ -46,7 +47,6 @@ SelectCalendarsPanel) ->
 
 			@calendars.fetch()
 
-		#
 		refreshCalendar: (calendar) ->
 			@hideCalendar calendar
 			if calendar.get 'display'
@@ -58,23 +58,7 @@ SelectCalendarsPanel) ->
 			calendar.events.forEach (event) =>
 				@removeEventFromCalendar event
 
-
-		_changedCalendarDisplay: (calendar) =>
-			@refreshCalendar calendar
-
-
-		changedActiveCalendars: =>
-			for events, datestamp in @eventsByDatestamp
-				console.log events, datestamp
-
-			@eventsByDatestamp = {}
-
-			for calendarId in @appStateResource.get('activeCalendars').split(",")
-				calendar = @calendars.get(calendarId)
-				calendar.events.forEach (event) =>
-					@addEventToCalendar event
-
-
+		# Get UNIX datestamp of start-time of an event
 		getStartDatestamp: (event) ->
 			start = event.get 'start'
 			if start.dateTime
@@ -84,7 +68,7 @@ SelectCalendarsPanel) ->
 
 			KHCalendar.ensureDatestamp dt.datetimeToTimestamp(start)
 
-
+		# Add event to calendar
 		addEventToCalendar: (event) ->
 			start = @getStartDatestamp event
 
@@ -94,18 +78,13 @@ SelectCalendarsPanel) ->
 			@eventsByDatestamp[start].push event
 			@renderDate start
 
-
+		# Get color of an event
 		getEventColor: (event) ->
-			color = ""
-			colorId = event.get 'colorId'
-			if not colorId
-				color = event.get 'calendarColor'
-			else
-				color = gColors[colorId]
+			if event.get 'colorId'
+				return gColors[event.get 'colorId']
+			return event.get 'calendarColor'
 
-			return color
-
-		# Removes an event from the calendar view
+		# Removes a specific event from the calendar view
 		removeEventFromCalendar: (event) ->
 			start = @getStartDatestamp event
 
@@ -118,7 +97,6 @@ SelectCalendarsPanel) ->
 				@eventsByDatestamp[start] = newEvents
 
 			@renderDate start
-
 
 		# Need to be called after @eventsByDatestamp is changed
 		renderDate: (datestamp) ->
@@ -138,10 +116,7 @@ SelectCalendarsPanel) ->
 			@khCalendar.registerOnclick datestamp, =>
 				window.alert summary
 
-
-
-
-
+		# Create the khCalendar
 		render: ->
 			@el = document.getElementById @id
 			@$el = $ @el

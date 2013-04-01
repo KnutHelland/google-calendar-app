@@ -12,9 +12,9 @@ $gclient = new Google_Client();
 $gcal = new Google_CalendarService($gclient);
 $gclient->setApplicationName("kh webapp");
 
-$gclient->setClientId('661924815038-fet45jucrds47q8utfo7c6apm1po7r8r.apps.googleusercontent.com');
-$gclient->setClientSecret('_ht7x2qXFVaQSaGHH2jqKcuS');
-$gclient->setRedirectUri('http://localhost/~knut/webapp/index.php');
+$gclient->setClientId(APP_CLIENTID);
+$gclient->setClientSecret(APP_CLIENTSECRET);
+$gclient->setRedirectUri(APP_REDIRECTURI);
 // $gclient->setDeveloperKey('')
 /*
 if (isset($_GET['logout'])) {

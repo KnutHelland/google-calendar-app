@@ -52,9 +52,10 @@ module.exports = function (grunt) {
 					paths: {
 						jquery: 'empty:',
 						underscore: 'empty:',
-						backbone: 'empty:'
-					}/*,
-					optimize: 'none'*/
+						backbone: 'empty:',
+						jquery_mobile: 'empty:'
+					},
+					optimize: 'none'
 				}
 			}
 		},
