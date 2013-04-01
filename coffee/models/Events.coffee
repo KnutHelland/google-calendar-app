@@ -8,6 +8,7 @@ define ['backbone', 'models/Event'], (Backbone, Event) ->
 
 			@on 'add', (event) ->
 				event.set 'calendarColor', @calendarColor
+				event.set 'calendarId', @calendarId
 
 			super models, options
 

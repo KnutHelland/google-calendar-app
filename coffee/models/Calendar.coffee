@@ -4,9 +4,15 @@ define ['backbone', 'models/Events'], (Backbone, Events) ->
 
 		events: null
 
+		defaults:
+			display: true
+
 		initialize: ->
 			@on 'add', ->
 				@events = new Events [],
 					calendarId: @get 'id'
 					calendarColor: @get 'backgroundColor'
 				@events.fetch()
+
+				if @get 'summaryOverride'
+					@set 'summary', @get('summaryOverride')

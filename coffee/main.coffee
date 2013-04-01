@@ -19,7 +19,7 @@ requirejs.config
 		gapi: 'https://apis.google.com/js/client.js'
 
 
-require ['router', 'backbone', 'jquery', 'models/calendars'], (Router, Backbone, $, Calendars) ->
+require ['router', 'backbone', 'jquery', 'jquery_mobile', 'models/calendars'], (Router, Backbone, $, mobile, Calendars) ->
  	router = Router
  	Backbone.history.start()
 

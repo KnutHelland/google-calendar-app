@@ -90,13 +90,36 @@ define ["jquery"], ($) ->
   
       return canvas
   
+    onclickListenersByDate: []
+
     #
     # Registers a callback to happen onclick on a date.
     #
     registerOnclick: (datestamp, callback) ->
       datestamp = Calendar.ensureDatestamp datestamp
-      $("#date_#{datestamp}_#{@num}").click datestamp, (evt) ->
+
+      internalCallback = (evt) =>
         callback evt.data
+
+      if not @onclickListenersByDate[datestamp]
+        @onclickListenersByDate[datestamp] = []
+
+      @onclickListenersByDate[datestamp].push internalCallback
+      $("#date_#{datestamp}_#{@num}").on "click", datestamp, internalCallback
+
+
+    clear: (datestamp) ->
+      datestamp = Calendar.ensureDatestamp datestamp
+      date = $("#date_#{datestamp}_#{@num}")
+      canvas = $("#canvas_date_#{datestamp}_#{@num}").remove()
+      
+      if @coloredDates[datestamp]
+        @coloredDates[datestamp] = []
+
+      if @onclickListenersByDate[datestamp]
+        for listener in @onclickListenersByDate[datestamp]
+          date.off "click", listener
+
   
     #
     # Marks the passed dates.
@@ -118,14 +141,13 @@ define ["jquery"], ($) ->
   
       return null
   
+    coloredDates: {}
+
     #
     # Adds a color to a date.
     #
     colorDate: (datestamp, color) ->
       datestamp = Calendar.ensureDatestamp datestamp
-  
-      if not @coloredDates?
-        @coloredDates = {}
   
       if not @coloredDates[datestamp]?
         @coloredDates[datestamp] = new Array()

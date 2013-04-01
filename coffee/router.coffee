@@ -1,4 +1,4 @@
-define ['backbone', 'views/CalendarView'], (Backbone, CalendarView) ->
+define ['backbone', 'views/CalendarView', 'views/SelectCalendarsPanel'], (Backbone, CalendarView, SelectCalendarsPanel) ->
 	
 	class Router extends Backbone.Router
 		routes:
