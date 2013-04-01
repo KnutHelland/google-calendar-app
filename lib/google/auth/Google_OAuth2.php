@@ -99,7 +99,7 @@ class Google_OAuth2 extends Google_Auth {
           'client_id' => $this->clientId,
           'client_secret' => $this->clientSecret
       )));
-
+      
       if ($request->getResponseHttpCode() == 200) {
         $this->setAccessToken($request->getResponseBody());
         $this->token['created'] = time();

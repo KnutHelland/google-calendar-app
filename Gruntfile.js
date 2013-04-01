@@ -2,7 +2,7 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-coffee');		
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	// grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-clean');	
 
@@ -11,8 +11,8 @@ module.exports = function (grunt) {
 
 		watch: {
 
-			files: ['Gruntfile.js', 'coffee/*'],
-			tasks: ['clean', 'coffee', 'requirejs']
+			files: ['Gruntfile.js', 'coffee/*', 'coffee/**'],
+			tasks: ['clean', 'coffee', 'less', 'requirejs']
 		},
 
 		/* Compile files from ./coffee to ./js */
@@ -20,12 +20,24 @@ module.exports = function (grunt) {
 			compile: {
 				expand: true,
 				cwd: 'coffee',
-				src: ['**/*.coffee'],
-				dest: 'js/',
+				src: ['./*/*.coffee', '**.coffee'],
+				dest: 'js',
 				ext: '.js'
 				// options: {
 				// 	bare: true
 				// }
+			}
+		},
+
+		less: {
+			compile: {
+				options: {
+					paths: ['less']
+				},
+				cwd: './',
+				src: ['less/*.less'],
+				dest: 'css/style.css',
+				ext: '.css',
 			}
 		},
 
@@ -49,10 +61,10 @@ module.exports = function (grunt) {
 
 
 		clean: {
-			"default": ['js']
+			"default": ['js/*']
 		}
 	});
 
 
-	grunt.registerTask('default', ['clean', 'coffee', 'requirejs']);
+	grunt.registerTask('default', ['clean', 'coffee', 'less', 'requirejs']);
 }

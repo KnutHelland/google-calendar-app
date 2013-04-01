@@ -16,7 +16,7 @@ $gclient->setClientId('661924815038-fet45jucrds47q8utfo7c6apm1po7r8r.apps.google
 $gclient->setClientSecret('_ht7x2qXFVaQSaGHH2jqKcuS');
 $gclient->setRedirectUri('http://localhost/~knut/webapp/index.php');
 // $gclient->setDeveloperKey('')
-
+/*
 if (isset($_GET['logout'])) {
 	unset($_SESSION['token']);
 }
@@ -34,3 +34,6 @@ if (!$gclient->getAccessToken()) {
   $authUrl = $gclient->createAuthUrl();
   print "<a class='login' href='$authUrl'>Connect Me!</a>";
 }
+*/
+
+$gclient->setAccessToken(APP_TOKEN);

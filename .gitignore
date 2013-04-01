@@ -2,3 +2,6 @@ js/*
 dist
 node_modules
 lib/google-api-php-client
+css/*
+.settings.php
+.token.php

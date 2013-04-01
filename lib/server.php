@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-
+require dirname(__FILE__).'/tidyjson.php';
 
 class Request {
 	/** The RESTful method */
@@ -71,7 +71,7 @@ class Response {
 		if (count($this->data) == 0 && strlen($this->buffer) > 0) {
 			echo $this->buffer;
 		} else {
-			echo json_encode($this->data);
+			echo TidyJSON::tidy(json_encode($this->data));
 		}
 	}
 }

@@ -1,10 +1,11 @@
 <?php
 
+require '.settings.php';
 require_once 'lib/server.php';
 require 'lib/connectToGoogle.php';
 
 if (!strstr($_SERVER['HTTP_ACCEPT'], 'json')) {
-	header('location: client.html');
+ 	header('location: client.html');
 }
 
 class EventsModel extends Model {
@@ -26,8 +27,29 @@ class EventsModel extends Model {
 	/** List calendar events
 	 *  url: /calendar/:calendar/events(/*) */
 	public function index($req, $res) {
+		$data = array();
 		$calendarId = $req->param('calendar');
-		$data = $this->gcal->events->listEvents($calendarId);
+		
+		$options = array(
+			'timeMin' => gmdate('c')
+		);
+
+		if ($calendarId == 'all') {
+			$data = array();
+			$calendars = $this->gcal->calendarList->listCalendarList();
+			$calendars = $calendars['items'];
+			foreach ($calendars as $calendar) {
+				$items = $this->gcal->events->listEvents($calendar['id'], $options);
+				if (isset($items['items'])) {
+					$items = $items['items'];
+					$data = array_merge($data, $items);
+				}
+			}
+		} else {
+			$data = $this->gcal->events->listEvents($calendarId, $options);
+			$data = $data['items'];
+		}
+
 		$res->sendData($data);
 	}
 
@@ -67,7 +89,7 @@ class CalendarsModel extends Model {
 	  * url: /calendars(/) */
 	public function index($req, $res) {
 		$data = $this->gcal->calendarList->listCalendarList();
-		$res->sendData($data);
+		$res->sendData($data['items']);
 	}
 
 	/** Get info about the calendar
@@ -91,8 +113,44 @@ class CalendarsModel extends Model {
 	}
 }
 
+class ColorsModel extends Model {
+
+	private $gcal;
+
+	public function __construct($router) {
+		global $gcal, $gclient;
+		$this->gcal = $gcal;
+		parent::__construct($router);
+	}
+
+	public function index($req, $res) {
+		$this->sendData(array('error' => 'Cannot list colors'));
+	}
+
+	/** Get a specific color
+	 *  url: /colors/:id(/*) */
+	public function get($req, $res) {
+		$id = $req->param('id');
+		$data = $this->gcal->colors->get($id);
+		$res->sendData($data);
+	}
+
+	public function update($req, $res) {
+		$this->sendData(array('error' => 'Cannot update a color'));
+	}
+
+	public function delete($req, $res) {
+		$this->sendData(array('error' => 'Cannot delete a color.'));
+	}
+
+	public function create($req, $res) {
+		$this->sendData(array('error' => 'Cannot create a color.'));
+	}
+}
+
 
 $router = new Router();
 new CalendarsModel($router);
 new EventsModel($router);
+new ColorsModel($router);
 $router->run();
