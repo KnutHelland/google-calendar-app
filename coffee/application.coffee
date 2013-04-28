@@ -1,6 +1,6 @@
 define ['jquery', 'kh-calendar'], ($, Calendar) ->
 	
-	class Application
+        class Application
 
 		start: () ->
 			cal = new Calendar()
