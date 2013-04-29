@@ -3,6 +3,7 @@ define [ \
 'jquery', \
 'underscore', \
 'models/Events', \
+'models/Event', \
 'kh-calendar', \
 'datetime-utils', \
 'models/Calendars', \
@@ -13,6 +14,7 @@ Backbone, \
 $, \
 _, \
 EventsCollection, \
+Event, \
 KHCalendar, \
 dt, \
 CalendarsCollection, \
@@ -100,10 +102,35 @@ AddEventPanel) ->
 
       @renderDate start
 
+    @toCopy = false
+
+    copyEvent: (eventId) ->
+      @calendars.forEach (calendar) =>
+        event = calendar.events.get eventId
+        if event
+          @toCopy = event
+          return true
+        else
+          return false
+
+    doCopyEvent: (datestamp) ->
+      if not @toCopy
+        return undefined
+
+      event = @toCopy.clone()
+      event.set "start",
+        date: dt.timestampToDateString parseInt(datestamp)
+      event.set "end",
+        date: dt.timestampToDateString (KHCalendar.ensureDatestamp(3600*26 + parseInt(datestamp)))
+      event.set "id", null
+      event.id = null
+      event.save()      
+
+
     # Need to be called after @eventsByDatestamp is changed
     renderDate: (datestamp) ->
       @khCalendar.clear datestamp
-      summary = ""
+      # summary = ""
 
       if not @eventsByDatestamp[datestamp]
         @eventsByDatestamp[datestamp] = []
@@ -112,12 +139,13 @@ AddEventPanel) ->
 
         color = @getEventColor event
         @khCalendar.colorDate datestamp, color
-        summary += event.get "summary"
-        summary += "\n"
+      #   summary += event.get "summary"
+      #   summary += "\n"
 
-      if summary.length > 0
-        @khCalendar.registerOnclick datestamp, =>
-          window.alert summary
+      # if summary.length > 0
+      #   @khCalendar.registerOnclick datestamp, =>
+      #     window.alert summary
+
 
     # Create the khCalendar
     render: ->
@@ -137,11 +165,29 @@ AddEventPanel) ->
       # @khCalendar.colorDate femtejuni, "ff0000"
       # @khCalendar.clear femtejuni
 
+      khCalendar.registerOnclick (datestamp) =>
+        if @toCopy
+          @doCopyEvent datestamp
+          return undefined
+
+        summary = ""
+
+        if not @eventsByDatestamp[datestamp]
+          @eventsByDatestamp[datestamp] = []
+
+        for event in @eventsByDatestamp[datestamp]
+          summary += event.get "summary"
+          summary += "\n"
+
+        window.alert summary
+
 
       khCalendar.registerTapholdListener (datestamp) =>
         panel = new AddEventPanel
           datestamp: datestamp
           calendars: @calendars
+          events: @eventsByDatestamp[datestamp]
+          calendarView: this
         panel.render()
 
 

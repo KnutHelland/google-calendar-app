@@ -10,8 +10,8 @@ define [], ->
 
 			string = ''
 			string += date.getUTCFullYear()
-			string += '-' + date.getUTCMonth()
-			string += '-' + date.getUTCDate()
+			string += '-' + (date.getUTCMonth()+1)
+			string += '-' + (date.getUTCDate()+1)
 
 
 		timestampToDatetimeString: (timestamp) ->
@@ -19,8 +19,8 @@ define [], ->
 
 			string = ''
 			string += date.getUTCFullYear()
-			string += '-' + date.getUTCMonth()
-			string += '-' + date.getUTCDate()
+			string += '-' + (date.getUTCMonth()+1)
+			string += '-' + (date.getUTCDate()+1)
 			string += 'T' + date.getUTCHours()
 			string += ':' + date.getUTCMinutes()
 			string += 'z'

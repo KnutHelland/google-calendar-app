@@ -89,7 +89,7 @@ define ["jquery"], ($) ->
           left: c.parent().position().left
   
       return canvas
-  
+
     onclickListenersByDate: []
 
     abortOnclick: false
@@ -97,19 +97,28 @@ define ["jquery"], ($) ->
     #
     # Registers a callback to happen onclick on a date.
     #
-    registerOnclick: (datestamp, callback) ->
-      datestamp = Calendar.ensureDatestamp datestamp
+    # registerOnclick: (datestamp, callback) ->
+    #   datestamp = Calendar.ensureDatestamp datestamp
 
-      internalCallback = (evt) =>
-        if not @abortOnclick
-          callback evt.data
-        @abortOnclick = false
+    #   internalCallback = (evt) =>
+    #     if not @abortOnclick
+    #       callback evt.data
+    #     @abortOnclick = false
   
-      if not @onclickListenersByDate[datestamp]
-        @onclickListenersByDate[datestamp] = []
+    #   if not @onclickListenersByDate[datestamp]
+    #     @onclickListenersByDate[datestamp] = []
 
-      @onclickListenersByDate[datestamp].push internalCallback
-      $("#date_#{datestamp}_#{@num}").on "tap", datestamp, internalCallback
+    #   @onclickListenersByDate[datestamp].push internalCallback
+    #   $("#date_#{datestamp}_#{@num}").on "tap", datestamp, internalCallback
+
+    registerOnclick: (callback) ->
+      context = $(".calendar_#{@num}")
+      $("td", context).on "tap", (evt) =>
+        if not @abortOnclick
+          datestamp = $(evt.currentTarget).attr("data-datestamp")
+          if datestamp > 0
+            callback datestamp
+        @abortOnclick = false
 
 
     # Register a taphold event. First argument is datetime of the day
@@ -121,25 +130,6 @@ define ["jquery"], ($) ->
         if datestamp > 0
           callback datestamp
 
-
-    # onholdListenersByDate: []
-
-    # #
-    # # Registers a callback to happen onclick on a date.
-    # #
-    # registerOnhold: (datestamp, callback) ->
-    #   datestamp = Calendar.ensureDatestamp datestamp
-
-    #   internalCallback = (evt) =>
-    #     callback evt.data
-
-    #   if not @onholdListenersByDate[datestamp]
-    #     @onholdListenersByDate[datestamp] = []
-
-    #   @onholdListenersByDate[datestamp].push internalCallback
-    #   $("#date_#{datestamp}_#{@num}").on "taphold", datestamp, internalCallback
-
-
     clear: (datestamp) ->
       datestamp = Calendar.ensureDatestamp datestamp
       date = $("#date_#{datestamp}_#{@num}")
@@ -147,10 +137,6 @@ define ["jquery"], ($) ->
       
       if @coloredDates[datestamp]
         @coloredDates[datestamp] = []
-
-      if @onclickListenersByDate[datestamp]
-        for listener in @onclickListenersByDate[datestamp]
-          date.off "click", listener
 
   
     #

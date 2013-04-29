@@ -8,14 +8,24 @@ define ['backbone', 'jquery', 'underscore', 'kh-calendar', 'models/event', 'date
     <label for="AddEventPanel-calendar-<%= id %>"><%= name %></label>
     <input type="radio" name="AddEventPanel-calendar" id="AddEventPanel-calendar-<%= id %>" value="<%= id %>">
     """
+
+    eventTemplate: _.template """
+  	<input type="button" class="duplicateEvent" data-event-id="<%= id %>" value="<%= name %>" data-mini="true" />
+    """
+
     elementTemplate: _.template """
+    <% if (events && events.length > 0) { %>
+      <h3>Copy event</h3>
+      <%= events %>
+    <% } %>
+    <h3>Add event</h3>
     <label for="AddEventPanel-summary">Tittel</label>
     <input type="text" name="AddEventPanel-summary" id="AddEventPanel-summary" />
     <fieldset data-role="controlgroup">
     <legend>Select calendar</legend>
     <%= calendars %>
     </fieldset>
-    <input type="button" value="Add event" />
+    <input type="button" id="AddEventPanel-submit" value="Add event" />
     """
 
     render: (event) =>
@@ -23,15 +33,28 @@ define ['backbone', 'jquery', 'underscore', 'kh-calendar', 'models/event', 'date
       @$el = $ @el
       @$el.text ""
 
+      events = ""
+      for event in @options['events']
+        events += @eventTemplate
+          id: event.get "id"
+          name: event.get "summary"
+          
       list = ""
       @options.calendars.forEach (calendar) =>
         list += @calendarTemplate
           id: calendar.get 'id'
           name: calendar.get 'summary'
 
-      @$el.append @elementTemplate({calendars: list})
+      @$el.append @elementTemplate(
+        calendars: list
+        events: events
+        date: Datetime.timestampToDatetimeString parseInt(@options.datestamp))
 
-      $("input[type=button]", @$el).on 'click', =>
+      $(".duplicateEvent", @$el).on 'click', (evt) =>
+        @options.calendarView.copyEvent $(evt.currentTarget).attr("data-event-id")
+        @$el.panel "close"
+
+      $("AddEventPanel-submit", @$el).on 'click', =>
         event = new Event()
 
         event.set "start", 
