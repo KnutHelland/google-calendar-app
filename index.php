@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 require '.settings.php';
 require_once 'lib/server.php';
 require 'lib/connectToGoogle.php';
