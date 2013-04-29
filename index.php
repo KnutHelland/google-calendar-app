@@ -31,7 +31,7 @@ class EventsModel extends Model {
         $calendarId = $req->param('calendar');
     
         $options = array(
-            'timeMin' => gmdate('c')
+            'timeMin' => gmdate('c', strtotime("-1 month"))
         );
 
         if ($calendarId == 'all') {
