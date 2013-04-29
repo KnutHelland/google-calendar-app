@@ -138,9 +138,10 @@ AddEventPanel) ->
       # @khCalendar.clear femtejuni
 
 
-      khCalendar.registerTapholdListener (datestamp) ->
+      khCalendar.registerTapholdListener (datestamp) =>
         panel = new AddEventPanel
           datestamp: datestamp
+          calendars: @calendars
         panel.render()
 
 

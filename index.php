@@ -71,7 +71,19 @@ class EventsModel extends Model {
     }
 
     public function create($req, $res) {
-        $res->sendData(array('error' => 'Cannot create events'));
+        $calendarId = $req->data->calendarId;
+
+        $event = new Google_Event();
+        $event->calendarId = $req->data->calendarId;
+        $event->summary = $req->data->summary;
+        $event->start = (array)$req->data->start;
+        $event->end = (array)$req->data->end;
+        
+        // $result = $this->gcal->addEvent((array) $req->data);
+        $result = $this->gcal->events->insert($calendarId, $event);
+        $res->sendData(array('result' => $result));
+
+        // $res->sendData(array('error' => 'Cannot create events'));
     }
 }
 
