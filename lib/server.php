@@ -66,7 +66,7 @@ class Response {
 
 	/** Send the response */
 	public function flush() {
-		$this->sendHeader("Content-type", $this->contentType);
+		// $this->sendHeader("Content-type", $this->contentType);
 		
 		if (count($this->data) == 0 && strlen($this->buffer) > 0) {
 			echo $this->buffer;
