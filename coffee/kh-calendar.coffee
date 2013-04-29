@@ -92,6 +92,8 @@ define ["jquery"], ($) ->
   
     onclickListenersByDate: []
 
+    abortOnclick: false
+
     #
     # Registers a callback to happen onclick on a date.
     #
@@ -99,13 +101,43 @@ define ["jquery"], ($) ->
       datestamp = Calendar.ensureDatestamp datestamp
 
       internalCallback = (evt) =>
-        callback evt.data
-
+        if not @abortOnclick
+          callback evt.data
+        @abortOnclick = false
+  
       if not @onclickListenersByDate[datestamp]
         @onclickListenersByDate[datestamp] = []
 
       @onclickListenersByDate[datestamp].push internalCallback
-      $("#date_#{datestamp}_#{@num}").on "click", datestamp, internalCallback
+      $("#date_#{datestamp}_#{@num}").on "tap", datestamp, internalCallback
+
+
+    # Register a taphold event. First argument is datetime of the day
+    registerTapholdListener: (callback) ->
+      context = $(".calendar_#{@num}")
+      $("td", context).on "taphold", (evt) =>
+        @abortOnclick = true
+        datestamp = $(evt.currentTarget).attr("data-datestamp")
+        if datestamp > 0
+          callback datestamp
+
+
+    # onholdListenersByDate: []
+
+    # #
+    # # Registers a callback to happen onclick on a date.
+    # #
+    # registerOnhold: (datestamp, callback) ->
+    #   datestamp = Calendar.ensureDatestamp datestamp
+
+    #   internalCallback = (evt) =>
+    #     callback evt.data
+
+    #   if not @onholdListenersByDate[datestamp]
+    #     @onholdListenersByDate[datestamp] = []
+
+    #   @onholdListenersByDate[datestamp].push internalCallback
+    #   $("#date_#{datestamp}_#{@num}").on "taphold", datestamp, internalCallback
 
 
     clear: (datestamp) ->
@@ -256,7 +288,7 @@ define ["jquery"], ($) ->
       # Build the month
       @id = "month_#{@monthstamp}_#{@num}"
       @element = $ """
-        <table id="#{id}" class="calendar month_#{monthstamp}"</table>"""
+        <table id="#{id}" class="calendar calendar_#{@num} month_#{monthstamp}"</table>"""
   
       # Build headers
       @element.append($ """
@@ -295,7 +327,7 @@ define ["jquery"], ($) ->
             clss = """ class="#{clss}" """
   
           week.append($ """
-            <td#{clss}#{id}><p>#{dayIterator.getDate()}</p></td>""")
+            <td#{clss}#{id} data-datestamp="#{datestamp}"><p>#{dayIterator.getDate()}</p></td>""")
           dayIterator = new Date((Calendar.ensureDatestamp datestamp + 3600*25) * 1000)
   
           if dayIterator.getDate() is 1 and i > 0

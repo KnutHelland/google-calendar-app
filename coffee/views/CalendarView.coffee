@@ -7,7 +7,8 @@ define [ \
 'datetime-utils', \
 'models/Calendars', \
 'google-colors', \
-'views/SelectCalendarsPanel'], ( \
+'views/SelectCalendarsPanel', \
+'views/AddEventPanel'], ( \
 Backbone, \
 $, \
 _, \
@@ -16,7 +17,8 @@ KHCalendar, \
 dt, \
 CalendarsCollection, \
 gColors, \
-SelectCalendarsPanel) ->
+SelectCalendarsPanel, \
+AddEventPanel) ->
 
   class CalendarView extends Backbone.View
     id: 'calendar-view'
@@ -131,8 +133,15 @@ SelectCalendarsPanel) ->
         @$el.append month
         thisMonth = KHCalendar.ensureMonthstamp thisMonth+3600*24*33
 
-      femtejuni = 1370383200
-      @khCalendar.colorDate femtejuni, "ff0000"
-      @khCalendar.clear femtejuni
+      # femtejuni = 1370383200
+      # @khCalendar.colorDate femtejuni, "ff0000"
+      # @khCalendar.clear femtejuni
+
+
+      khCalendar.registerTapholdListener (datestamp) ->
+        panel = new AddEventPanel
+          datestamp: datestamp
+        panel.render()
+
 
 
