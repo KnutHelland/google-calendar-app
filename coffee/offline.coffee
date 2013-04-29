@@ -3,10 +3,17 @@ define [], ->
 		_getLocalStorage: ->
 			return window.localStorage
 
+    _storageName: (name) ->
+      "collection_" + name
+
 		saveCollection: (name, collection) ->
-			window.localStorage.setItem name, collection.toJSON()
+			window.localStorage.setItem @_storageName(name), collection.toJSON()
 
 		loadCollection: (name, collection) ->
-			return null
+      storage = window.localStorage.getItem @_storageName(name)
+      if storage
+        return storage
+
+      storage = nea 
 
 
